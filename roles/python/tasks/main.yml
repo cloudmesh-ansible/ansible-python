@@ -1,0 +1,33 @@
+---
+- hosts: ubuntu
+  tasks:
+  - name: Download Python2.7.10
+    get_url:
+       url="https://www.python.org/ftp/python/{{ python2_version }}/Python-{{ python2_version }}.tgz"
+       dest=/tmp
+    register: wget
+
+  - name: Extracting from Python Zip Files
+    unarchive:
+       src={{ wget.dest }}
+       dest=/tmp
+       copy=no
+    register: untar
+
+  - name: Install Basic Python Packages
+    apt: pkg={{ system_packages }} state=latest
+    tags:
+       - full
+       - python_basics
+
+  - name: Install Other Python Packages
+    apt: pkg={{ other_python_pkgs }} state=latest
+    tags:
+       - full
+       - other_pkgs
+
+  - name: configure and make
+    shell: ./configure && make -j{{ j }} chdir="{{ untar.src | regex_replace('\.tgz$', '') }}"
+
+  - name: make install
+    shell: make install -j{{ j }} chdir="{{ untar.src | regex_replace('\.tgz$', '') }}"

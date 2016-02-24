@@ -1,0 +1,4 @@
+---
+- hosts: ubuntu15
+  roles:
+    - { role: python }
