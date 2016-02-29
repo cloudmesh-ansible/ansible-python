@@ -2,7 +2,7 @@
 # defaults file for python
 install_opt: source
 j: "{{ ansible_processor_vcpus + 1 }}"
-python2_version: 2.7.10
+python_version: 2.7.10
 pip_version: 8.0.2
 system_packages:
     - python-setuptools
